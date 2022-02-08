@@ -1,4 +1,4 @@
-package com.donus.restapiforum
+package com.donus.restapiforum.controller
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -10,6 +10,6 @@ class HelloController {
 
     @GetMapping
     fun hello(): String {
-        return "TESTANDO CONTROLLER AUTO-SAVE"
+        return "TESTANDO CONTROLLER AUTO-SAVE 157"
     }
 }
