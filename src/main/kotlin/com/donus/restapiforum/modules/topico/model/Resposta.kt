@@ -1,5 +1,6 @@
-package com.donus.restapiforum.model
+package com.donus.restapiforum.modules.topico.model
 
+import com.donus.restapiforum.modules.topico.model.Topico
 import java.time.LocalDateTime
 
 data class Resposta(
