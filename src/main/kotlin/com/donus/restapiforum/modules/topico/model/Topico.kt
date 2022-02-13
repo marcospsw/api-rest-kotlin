@@ -5,7 +5,7 @@ import com.donus.restapiforum.modules.usuario.model.Usuario
 import java.time.LocalDateTime
 
 data class Topico(
-    var id: Long? = null,
+    var id: Long,
     val titulo: String,
     val mensagem: String,
     val dataCriacao: LocalDateTime = LocalDateTime.now(),

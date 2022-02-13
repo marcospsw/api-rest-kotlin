@@ -6,6 +6,7 @@ import com.donus.restapiforum.modules.usuario.model.Usuario
 import java.time.LocalDateTime
 
 data class TopicoResponseDTO(
+    val id: Long,
     val titulo: String,
     val mensagem: String,
     val status: StatusTopico,

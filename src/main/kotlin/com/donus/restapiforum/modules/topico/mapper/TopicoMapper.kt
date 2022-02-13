@@ -15,6 +15,7 @@ class TopicoMapper(
 ) : Mapper<Topico, TopicoRequestDTO, TopicoResponseDTO> {
     override fun entityToDTO(e: Topico): TopicoResponseDTO {
         return TopicoResponseDTO(
+            id = e.id,
             titulo = e.titulo,
             mensagem = e.mensagem,
             status = e.status,
@@ -26,6 +27,7 @@ class TopicoMapper(
 
     override fun dtoToEntity(dto: TopicoRequestDTO): Topico {
         return Topico(
+            id = dto.id!!,
             titulo = dto.titulo,
             mensagem = dto.mensagem,
             status = dto.status,

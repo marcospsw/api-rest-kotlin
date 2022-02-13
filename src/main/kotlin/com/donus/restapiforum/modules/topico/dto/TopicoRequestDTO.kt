@@ -19,7 +19,7 @@ data class TopicoRequestDTO(
 
     @field:NotEmpty
     val cursoId: Long,
-    
+
     @field:NotEmpty
     val autorId: Long,
 )
