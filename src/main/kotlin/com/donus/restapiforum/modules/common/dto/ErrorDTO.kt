@@ -4,6 +4,7 @@ import java.time.LocalDateTime
 
 data class ErrorDTO(
     val message: String?,
-    val errorCode: Int,
+    val statusCode: Int,
     val data: LocalDateTime = LocalDateTime.now(),
+    val path: String
 )

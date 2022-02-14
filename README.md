@@ -24,4 +24,36 @@
     - @GetMapping - @GetMapping("/complemento")Caso possua um complemento a rota
     - Para receber um param `@GetMapping("/{param}")` e `fun função(@PathVariable param: Tipo)`
     - Método responsavel por ler informações
-    - 
+- **POST**
+    - @PostMapping - @PostMapping("/complemento")Caso possua um complemento a rota
+    - Para receber o corpo da requisição `@PostMapping` e `fun função(@RequestBody body: Tipo)`
+    - Método responsavel por criar informações
+- **PUT**
+    - @PutMapping - @PutMapping("/complemento")Caso possua um complemento a rota
+    - Método responsavel por editar informações
+- **DELETE**
+    - @DeleteMapping - @DeleteMapping("/complemento")Caso possua um complemento a rota
+    - Método responsavel por deletar informações
+- **DTOs**
+    - Servem para receber-mos e devolver-mos só o necessário tanto na entrada quanto na saída de dados(Para não
+      trabalhar-mos em cima da entidade)
+- **MAPPERs**
+    - A classe mapper recebe a notação @Component
+    - Podem ser usados para transformar o `DTO de entrada em Entidade` e `Entidade em DTO de Saída`
+- **Enum**
+    - Usado para padronizar atributos `enum class StatusTopico { NAO_RESPONDIDO, NAO_SOLUCIONADO }`
+- **BeamValidation**
+    - Validação de campos recebidos no DTO de entrada
+    - No atributo desejado @field:validação("mensagem")
+    - Também é necessario declarar @Valid no controller que recebe esse DTO
+- **Tratando Exceções**
+    - Podemos usar um DTO padrão de Erro
+    - Podemos criar classes de exceções customizadas para que sejam chamadas no errorHander
+    - `class ErroException(message: String): Exception(message)`
+- **Handler de Exceções**
+    - classe recebe a notação @RestControllerAdvice
+    - São criadas funções para lançar o erro em caso de exceção
+    - As funções recebem as notações @ExceptionHandler(ClasseDeExceção::class) @ResponseStatus(
+      HttpStatus.StatusDesejado)
+    - Também recebem como parâmetro a `exception: Exceção` e a `request: HttpServletRequest`
+    - São executadas sempre que a classe de exceção é chamada e retornam o DTO de Erro
