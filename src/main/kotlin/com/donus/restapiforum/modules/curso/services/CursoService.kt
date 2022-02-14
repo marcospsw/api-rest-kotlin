@@ -1,5 +1,6 @@
 package com.donus.restapiforum.modules.curso.services
 
+import com.donus.restapiforum.modules.common.exception.NotFoundException
 import com.donus.restapiforum.modules.curso.dto.CursoRequestDTO
 import com.donus.restapiforum.modules.curso.dto.CursoResponseDTO
 import com.donus.restapiforum.modules.curso.mapper.CursoMapper
@@ -10,9 +11,9 @@ import java.util.*
 @Service
 class CursoService(private var cursos: MutableList<Curso> = mutableListOf(), private val cursoMapper: CursoMapper) {
     init {
-        val curso1: Curso = Curso(id = 1, nome = "Kotlin", categoria = "programação")
-        val curso2: Curso = Curso(id = 2, nome = "Java", categoria = "programação")
-        val curso3: Curso = Curso(id = 3, nome = "Javascript", categoria = "programação")
+        val curso1 = Curso(id = 1, nome = "Kotlin", categoria = "programação")
+        val curso2 = Curso(id = 2, nome = "Java", categoria = "programação")
+        val curso3 = Curso(id = 3, nome = "Javascript", categoria = "programação")
 
         cursos.addAll(mutableListOf(curso1, curso2, curso3))
     }
@@ -24,11 +25,12 @@ class CursoService(private var cursos: MutableList<Curso> = mutableListOf(), pri
     }
 
     fun findById(id: Long): CursoResponseDTO {
-        return cursoMapper.entityToDTO(cursos.find { it.id == id }!!)
+        val curso = cursos.find { it.id == id } ?: throw NotFoundException("Curso não encontrado")
+        return cursoMapper.entityToDTO(curso)
     }
 
     fun findEntityById(id: Long): Curso {
-        return cursos.find { it.id == id }!!
+        return cursos.find { it.id == id } ?: throw NotFoundException("Curso não encontrado")
     }
 
     fun create(dto: CursoRequestDTO): CursoResponseDTO {
@@ -43,6 +45,8 @@ class CursoService(private var cursos: MutableList<Curso> = mutableListOf(), pri
             it.categoria == category.lowercase(Locale.getDefault())
         }
 
+        cursoByCategory.isEmpty() && throw NotFoundException("Nenhum curso nesta categoria")
+
         val cursosMapped = mutableListOf<CursoResponseDTO>()
         cursoByCategory.map { curso ->
             cursosMapped.add(cursoMapper.entityToDTO(curso))
@@ -52,7 +56,7 @@ class CursoService(private var cursos: MutableList<Curso> = mutableListOf(), pri
     }
 
     fun update(id: Long, dto: CursoRequestDTO): CursoResponseDTO {
-        val curso = cursos.find { it.id == id }!!
+        val curso = cursos.find { it.id == id } ?: throw NotFoundException("Curso não encontrado")
         val index = cursos.indexOf(curso)
 
         cursos[index] = cursoMapper.dtoToEntity(dto)
@@ -61,6 +65,7 @@ class CursoService(private var cursos: MutableList<Curso> = mutableListOf(), pri
     }
 
     fun delete(id: Long) {
-        cursos.remove(cursos.find { it.id == id }!!)
+        val curso = cursos.find { it.id == id } ?: throw NotFoundException("Curso não encontrado")
+        cursos.remove(curso)
     }
 }

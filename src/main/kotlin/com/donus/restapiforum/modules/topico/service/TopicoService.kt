@@ -1,5 +1,6 @@
 package com.donus.restapiforum.modules.topico.service
 
+import com.donus.restapiforum.modules.common.exception.NotFoundException
 import com.donus.restapiforum.modules.curso.services.CursoService
 import com.donus.restapiforum.modules.topico.dto.TopicoRequestDTO
 import com.donus.restapiforum.modules.topico.dto.TopicoResponseDTO
@@ -11,12 +12,12 @@ import org.springframework.stereotype.Service
 @Service
 class TopicoService(
     private var topicos: MutableList<Topico> = mutableListOf(),
-    private val cursoService: CursoService,
-    private val usuarioService: UsuarioService,
-    private val topicoMapper: TopicoMapper
+    private val topicoMapper: TopicoMapper,
+    cursoService: CursoService,
+    usuarioService: UsuarioService,
 ) {
     init {
-        val topico1: Topico = Topico(
+        val topico1 = Topico(
             id = 1,
             titulo = "Gradle não funciona",
             mensagem = "Meu gradle não está funcionando adequadamente",
@@ -24,7 +25,7 @@ class TopicoService(
             autor = usuarioService.findEntityById(1)
         )
 
-        val topico2: Topico = Topico(
+        val topico2 = Topico(
             id = 2,
             titulo = "Gradle funciona",
             mensagem = "Meu gradle está funcionando adequadamente",
@@ -32,7 +33,7 @@ class TopicoService(
             autor = usuarioService.findEntityById(2)
         )
 
-        val topico3: Topico = Topico(
+        val topico3 = Topico(
             id = 3,
             titulo = "Maven não funciona",
             mensagem = "Meu maven não está funcionando adequadamente",
@@ -50,8 +51,7 @@ class TopicoService(
     }
 
     fun findById(id: Long): TopicoResponseDTO {
-        val topico = topicos.find { it.id == id }!!
-
+        val topico = topicos.find { it.id == id } ?: throw NotFoundException("Topico não encontrado")
         return topicoMapper.entityToDTO(topico)
     }
 
@@ -64,7 +64,7 @@ class TopicoService(
     }
 
     fun update(id: Long, dto: TopicoRequestDTO): TopicoResponseDTO {
-        val topico = topicos.find { it.id == id }!!
+        val topico = topicos.find { it.id == id } ?: throw NotFoundException("Topico não encontrado")
         val index = topicos.indexOf(topico)
 
         topicos[index] = topicoMapper.dtoToEntity(dto)
@@ -73,6 +73,7 @@ class TopicoService(
     }
 
     fun delete(id: Long) {
-        topicos.remove(topicos.find { it.id == id }!!)
+        val topico = topicos.find { it.id == id } ?: throw NotFoundException("Topico não encontrado")
+        topicos.remove(topico)
     }
 }

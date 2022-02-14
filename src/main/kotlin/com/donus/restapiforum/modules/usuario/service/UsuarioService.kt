@@ -1,5 +1,6 @@
 package com.donus.restapiforum.modules.usuario.service
 
+import com.donus.restapiforum.modules.common.exception.NotFoundException
 import com.donus.restapiforum.modules.usuario.dto.UsuarioRequestDTO
 import com.donus.restapiforum.modules.usuario.dto.UsuarioResponseDTO
 import com.donus.restapiforum.modules.usuario.mapper.UsuarioMapper
@@ -12,9 +13,9 @@ class UsuarioService(
     private val usuarioMapper: UsuarioMapper
 ) {
     init {
-        val usuario1: Usuario = Usuario(id = 1, nome = "Marcos Wergles", email = "marcospsw96@gmail.com")
-        val usuario2: Usuario = Usuario(id = 2, nome = "Camile Rodrigues", email = "camile@gmail.com")
-        val usuario3: Usuario = Usuario(id = 3, nome = "Tiago Souza", email = "tiago@gmail.com")
+        val usuario1 = Usuario(id = 1, nome = "Marcos Wergles", email = "marcospsw96@gmail.com")
+        val usuario2 = Usuario(id = 2, nome = "Camile Rodrigues", email = "camile@gmail.com")
+        val usuario3 = Usuario(id = 3, nome = "Tiago Souza", email = "tiago@gmail.com")
 
         usuarios.addAll(mutableListOf(usuario1, usuario2, usuario3))
     }
@@ -26,11 +27,12 @@ class UsuarioService(
     }
 
     fun findById(id: Long): UsuarioResponseDTO {
-        return usuarioMapper.entityToDTO(usuarios.find { it.id == id }!!)
+        val usuario = usuarios.find { it.id == id } ?: throw NotFoundException("Usuario não encontrado")
+        return usuarioMapper.entityToDTO(usuario)
     }
 
     fun findEntityById(id: Long): Usuario {
-        return usuarios.find { it.id == id }!!
+        return usuarios.find { it.id == id } ?: throw NotFoundException("Usuario não encontrado")
     }
 
     fun create(dto: UsuarioRequestDTO): UsuarioResponseDTO {
@@ -51,6 +53,7 @@ class UsuarioService(
     }
 
     fun delete(id: Long) {
-        usuarios.remove(usuarios.find { it.id == id }!!)
+        val usuario = usuarios.find { it.id == id } ?: throw NotFoundException("Usuario não encontrado")
+        usuarios.remove(usuario)
     }
 }
