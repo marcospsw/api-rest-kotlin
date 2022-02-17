@@ -12,14 +12,6 @@ class UsuarioService(
     private var usuarios: MutableList<Usuario> = mutableListOf(),
     private val usuarioMapper: UsuarioMapper
 ) {
-    init {
-        val usuario1 = Usuario(id = 1, nome = "Marcos Wergles", email = "marcospsw96@gmail.com")
-        val usuario2 = Usuario(id = 2, nome = "Camile Rodrigues", email = "camile@gmail.com")
-        val usuario3 = Usuario(id = 3, nome = "Tiago Souza", email = "tiago@gmail.com")
-
-        usuarios.addAll(mutableListOf(usuario1, usuario2, usuario3))
-    }
-
     fun list(): List<UsuarioResponseDTO> {
         return usuarios.map { usuario ->
             usuarioMapper.entityToDTO(usuario)

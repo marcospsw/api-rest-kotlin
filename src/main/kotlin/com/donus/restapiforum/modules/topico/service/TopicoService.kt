@@ -16,34 +16,6 @@ class TopicoService(
     cursoService: CursoService,
     usuarioService: UsuarioService,
 ) {
-    init {
-        val topico1 = Topico(
-            id = 1,
-            titulo = "Gradle não funciona",
-            mensagem = "Meu gradle não está funcionando adequadamente",
-            curso = cursoService.findEntityById(1),
-            autor = usuarioService.findEntityById(1)
-        )
-
-        val topico2 = Topico(
-            id = 2,
-            titulo = "Gradle funciona",
-            mensagem = "Meu gradle está funcionando adequadamente",
-            curso = cursoService.findEntityById(2),
-            autor = usuarioService.findEntityById(2)
-        )
-
-        val topico3 = Topico(
-            id = 3,
-            titulo = "Maven não funciona",
-            mensagem = "Meu maven não está funcionando adequadamente",
-            curso = cursoService.findEntityById(3),
-            autor = usuarioService.findEntityById(3)
-        )
-
-        topicos.addAll(mutableListOf(topico1, topico2, topico3))
-    }
-
     fun list(): List<TopicoResponseDTO> {
         return topicos.map { topico ->
             topicoMapper.entityToDTO(topico)

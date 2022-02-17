@@ -10,14 +10,6 @@ import java.util.*
 
 @Service
 class CursoService(private var cursos: MutableList<Curso> = mutableListOf(), private val cursoMapper: CursoMapper) {
-    init {
-        val curso1 = Curso(id = 1, nome = "Kotlin", categoria = "programação")
-        val curso2 = Curso(id = 2, nome = "Java", categoria = "programação")
-        val curso3 = Curso(id = 3, nome = "Javascript", categoria = "programação")
-
-        cursos.addAll(mutableListOf(curso1, curso2, curso3))
-    }
-
     fun list(): List<CursoResponseDTO> {
         return cursos.map { curso ->
             cursoMapper.entityToDTO(curso)
