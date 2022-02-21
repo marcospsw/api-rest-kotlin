@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
+import javax.transaction.Transactional
 import javax.validation.Valid
 
 @RestController
@@ -24,6 +25,7 @@ class CursoController(private val cursoService: CursoService) {
     }
 
     @PostMapping
+    @Transactional
     fun create(
         @RequestBody @Valid dto: CursoRequestDTO,
         uriBuilder: UriComponentsBuilder
@@ -40,11 +42,13 @@ class CursoController(private val cursoService: CursoService) {
     }
 
     @PutMapping("/{id}")
+    @Transactional
     fun update(@PathVariable id: Long, @RequestBody @Valid dto: CursoRequestDTO): ResponseEntity<CursoResponseDTO> {
         return ResponseEntity.ok(cursoService.update(id = id, dto = dto))
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) {
         return cursoService.delete(id = id)

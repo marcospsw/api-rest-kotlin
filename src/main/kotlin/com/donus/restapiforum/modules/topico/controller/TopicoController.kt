@@ -2,11 +2,13 @@ package com.donus.restapiforum.modules.topico.controller
 
 import com.donus.restapiforum.modules.topico.dto.TopicoRequestDTO
 import com.donus.restapiforum.modules.topico.dto.TopicoResponseDTO
+import com.donus.restapiforum.modules.topico.dto.TopicoUpdateRequestDTO
 import com.donus.restapiforum.modules.topico.service.TopicoService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
+import javax.transaction.Transactional
 import javax.validation.Valid
 
 @RestController
@@ -24,6 +26,7 @@ class TopicoController(private val topicoService: TopicoService) {
     }
 
     @PostMapping
+    @Transactional
     fun create(
         @RequestBody @Valid dto: TopicoRequestDTO,
         uriBuilder: UriComponentsBuilder
@@ -34,11 +37,16 @@ class TopicoController(private val topicoService: TopicoService) {
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody @Valid dto: TopicoRequestDTO): ResponseEntity<TopicoResponseDTO> {
+    @Transactional
+    fun update(
+        @PathVariable id: Long,
+        @RequestBody @Valid dto: TopicoUpdateRequestDTO
+    ): ResponseEntity<TopicoResponseDTO> {
         return ResponseEntity.ok(topicoService.update(id = id, dto = dto))
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) {
         return topicoService.delete(id = id)

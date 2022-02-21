@@ -5,47 +5,46 @@ import com.donus.restapiforum.modules.usuario.dto.UsuarioRequestDTO
 import com.donus.restapiforum.modules.usuario.dto.UsuarioResponseDTO
 import com.donus.restapiforum.modules.usuario.mapper.UsuarioMapper
 import com.donus.restapiforum.modules.usuario.model.Usuario
+import com.donus.restapiforum.modules.usuario.repository.UsuarioRepository
 import org.springframework.stereotype.Service
 
 @Service
 class UsuarioService(
-    private var usuarios: MutableList<Usuario> = mutableListOf(),
+    private val repository: UsuarioRepository,
     private val usuarioMapper: UsuarioMapper
 ) {
     fun list(): List<UsuarioResponseDTO> {
-        return usuarios.map { usuario ->
+        return repository.findAll().map { usuario ->
             usuarioMapper.entityToDTO(usuario)
         }
     }
 
     fun findById(id: Long): UsuarioResponseDTO {
-        val usuario = usuarios.find { it.id == id } ?: throw NotFoundException("Usuario não encontrado")
+        val usuario = repository.findById(id).orElseGet { throw NotFoundException("Usuario não encontrado") }
         return usuarioMapper.entityToDTO(usuario)
     }
 
     fun findEntityById(id: Long): Usuario {
-        return usuarios.find { it.id == id } ?: throw NotFoundException("Usuario não encontrado")
+        return repository.findById(id).orElseGet { throw NotFoundException("Usuario não encontrado") }
     }
 
     fun create(dto: UsuarioRequestDTO): UsuarioResponseDTO {
         val usuario = usuarioMapper.dtoToEntity(dto)
-        usuario.id = usuarios.size.toLong() + 1
-        usuarios.add(usuario)
+        repository.save(usuario)
 
         return usuarioMapper.entityToDTO(usuario)
     }
 
     fun update(id: Long, dto: UsuarioRequestDTO): UsuarioResponseDTO {
-        val usuario = usuarios.find { it.id == id }!!
-        val index = usuarios.indexOf(usuario)
+        val usuario = repository.findById(id).orElseGet { throw NotFoundException("Usuario não encontrado") }
+        usuario.nome = dto.nome
+        usuario.email = dto.email
 
-        usuarios[index] = usuarioMapper.dtoToEntity(dto)
-        usuarios[index].id = id
-        return usuarioMapper.entityToDTO(usuarios[index])
+        return usuarioMapper.entityToDTO(usuario)
     }
 
     fun delete(id: Long) {
-        val usuario = usuarios.find { it.id == id } ?: throw NotFoundException("Usuario não encontrado")
-        usuarios.remove(usuario)
+        val usuario = repository.findById(id).orElseGet { throw NotFoundException("Usuario não encontrado") }
+        repository.delete(usuario)
     }
 }
