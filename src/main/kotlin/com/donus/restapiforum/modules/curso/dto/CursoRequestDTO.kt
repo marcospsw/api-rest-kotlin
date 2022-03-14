@@ -7,7 +7,7 @@ data class CursoRequestDTO(
 
     @field:NotEmpty
     val nome: String,
-    
+
     @field:NotEmpty
     val categoria: String
 )

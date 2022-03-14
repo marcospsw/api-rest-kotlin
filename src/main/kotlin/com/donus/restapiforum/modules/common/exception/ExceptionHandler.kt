@@ -28,7 +28,7 @@ class ExceptionHandler {
         exception.bindingResult.fieldErrors.forEach { e ->
             messages[e.field] = e.defaultMessage
         }
-        
+
         return ErrorDTO(
             message = messages.toString(),
             statusCode = HttpStatus.BAD_REQUEST.value(),

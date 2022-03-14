@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class RestApiForumApplication
 
 fun main(args: Array<String>) {
-	runApplication<RestApiForumApplication>(*args)
+    runApplication<RestApiForumApplication>(*args)
 }

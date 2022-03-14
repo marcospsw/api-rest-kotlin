@@ -2,7 +2,11 @@ package com.donus.restapiforum.modules.topico.model
 
 import com.donus.restapiforum.modules.usuario.model.Usuario
 import java.time.LocalDateTime
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.ManyToOne
 
 @Entity
 data class Resposta(
