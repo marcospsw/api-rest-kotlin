@@ -32,7 +32,7 @@ class CursoService(private val repository: CursoRepository, private val cursoMap
     }
 
     fun listByCategory(category: String): List<CursoResponseDTO> {
-        val cursoByCategory = repository.getAllByCategoria(category)
+        val cursoByCategory = repository.getAllByCategoria(category.lowercase())
 
         cursoByCategory.isEmpty() && throw NotFoundException("Nenhum curso nesta categoria")
 

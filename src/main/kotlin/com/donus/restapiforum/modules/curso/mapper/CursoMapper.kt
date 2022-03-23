@@ -20,7 +20,7 @@ class CursoMapper : Mapper<Curso, CursoRequestDTO, CursoResponseDTO> {
         return Curso(
             id = dto.id,
             nome = dto.nome,
-            categoria = dto.categoria,
+            categoria = dto.categoria.lowercase(),
         )
     }
 }
