@@ -1,9 +1,14 @@
 package com.donus.restapiforum.modules.topico.controller
 
+import com.donus.restapiforum.modules.topico.dto.TopicoByCategoriaDTO
 import com.donus.restapiforum.modules.topico.dto.TopicoRequestDTO
 import com.donus.restapiforum.modules.topico.dto.TopicoResponseDTO
 import com.donus.restapiforum.modules.topico.dto.TopicoUpdateRequestDTO
 import com.donus.restapiforum.modules.topico.service.TopicoService
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.util.UriComponentsBuilder
@@ -24,8 +30,12 @@ import javax.validation.Valid
 class TopicoController(private val topicoService: TopicoService) {
 
     @GetMapping
-    fun list(): ResponseEntity<List<TopicoResponseDTO>> {
-        return ResponseEntity.ok(topicoService.list())
+    @Cacheable("listTopicos")
+    fun list(
+        @RequestParam(required = false) nomeCurso: String?,
+        page: Pageable
+    ): ResponseEntity<Page<TopicoResponseDTO>> {
+        return ResponseEntity.ok(topicoService.list(nomeCurso, page))
     }
 
     @GetMapping("/{id}")
@@ -35,6 +45,7 @@ class TopicoController(private val topicoService: TopicoService) {
 
     @PostMapping
     @Transactional
+    @CacheEvict(value = ["listTopicos"], allEntries = true)
     fun create(
         @RequestBody @Valid dto: TopicoRequestDTO,
         uriBuilder: UriComponentsBuilder
@@ -46,6 +57,7 @@ class TopicoController(private val topicoService: TopicoService) {
 
     @PutMapping("/{id}")
     @Transactional
+    @CacheEvict(value = ["listTopicos"], allEntries = true)
     fun update(
         @PathVariable id: Long,
         @RequestBody @Valid dto: TopicoUpdateRequestDTO
@@ -55,8 +67,14 @@ class TopicoController(private val topicoService: TopicoService) {
 
     @DeleteMapping("/{id}")
     @Transactional
+    @CacheEvict(value = ["listTopicos"], allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) {
         return topicoService.delete(id = id)
+    }
+
+    @GetMapping("/relatorio")
+    fun relatorio(): ResponseEntity<List<TopicoByCategoriaDTO>> {
+        return ResponseEntity.ok(topicoService.relatorio())
     }
 }
