@@ -21,6 +21,7 @@ class UsuarioMapper : Mapper<Usuario, UsuarioRequestDTO, UsuarioResponseDTO> {
             id = dto.id,
             nome = dto.nome,
             email = dto.email,
+            password = dto.password
         )
     }
 }

@@ -1,2 +1,2 @@
 alter table usuario
-    add column password(50) varchar not null
+    add column password varchar(200) not null

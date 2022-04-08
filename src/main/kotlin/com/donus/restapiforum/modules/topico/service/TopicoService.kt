@@ -46,11 +46,9 @@ class TopicoService(
 
     fun update(id: Long, dto: TopicoUpdateRequestDTO): TopicoResponseDTO {
         val topico = repository.findById(id).orElseThrow { throw NotFoundException("Topico não encontrado") }
-        topico.titulo = dto.titulo
-        topico.mensagem = dto.mensagem
-        topico.status = dto.status
+        val novoTopico = repository.save(topico.copy(titulo = dto.titulo, mensagem = dto.mensagem, status = dto.status))
 
-        return topicoMapper.entityToDTO(topico)
+        return topicoMapper.entityToDTO(novoTopico)
     }
 
     fun delete(id: Long) {

@@ -9,5 +9,8 @@ data class UsuarioRequestDTO(
     val nome: String,
 
     @field:NotEmpty
-    val email: String
+    val email: String,
+
+    @field:NotEmpty
+    val password: String,
 )

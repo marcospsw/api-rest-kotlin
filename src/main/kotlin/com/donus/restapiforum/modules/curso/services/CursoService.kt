@@ -46,10 +46,9 @@ class CursoService(private val repository: CursoRepository, private val cursoMap
 
     fun update(id: Long, dto: CursoRequestDTO): CursoResponseDTO {
         val curso = repository.findById(id).orElseThrow { NotFoundException("Curso não encontrado") }
-        curso.nome = dto.nome
-        curso.categoria = dto.categoria
+        val novoCurso = repository.save(curso.copy(nome = dto.nome, categoria = dto.categoria))
 
-        return cursoMapper.entityToDTO(curso)
+        return cursoMapper.entityToDTO(novoCurso)
     }
 
     fun delete(id: Long) {
