@@ -11,16 +11,30 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration(
-    private val userDetailsService: UserDetailsService
+    private val userDetailsService: UserDetailsService,
+    private val jwtUtils: JWTUtils
 ) : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
-        http?.authorizeRequests()?.antMatchers("/topicos")?.hasAuthority("LEITURA_ESCRITA")?.anyRequest()
-            ?.authenticated()?.and()?.sessionManagement()
-            ?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)?.and()?.formLogin()?.disable()?.httpBasic()
+        http?.csrf()?.disable()
+            ?.authorizeRequests()
+            ?.antMatchers("/topicos")?.hasAuthority("LEITURA_ESCRITABBB")
+            ?.antMatchers(HttpMethod.POST, "/login")?.permitAll()
+            ?.anyRequest()?.authenticated()?.and()
+        http?.addFilterBefore(
+            JWTLoginFilter(authManager = authenticationManager(), jwtUtils = jwtUtils),
+            UsernamePasswordAuthenticationFilter().javaClass
+        )
+        http?.addFilterBefore(
+            JWTAuthenticationFilter(jwtUtils),
+            UsernamePasswordAuthenticationFilter().javaClass
+        )
+        http?.sessionManagement()
+            ?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     }
 
     @Bean
